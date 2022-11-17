@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    <title>My super juesy bloh</title>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1><a href="/">На главную</a></h1>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+        <div>
+            <p>Дата публикации: {{ post.published_date }}</p>
+            <h2><a href="#"> {{ post.title }} </a></h2>
+            <p>
+                {{ post.text|linebreaksbr }}
+            </p>
+        </div>
+    {% endfor %}
+{% endblock %}
