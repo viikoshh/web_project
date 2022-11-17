@@ -7,17 +7,36 @@ from .forms import PostForm
 
 
 def post_add(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', id=post.id)
-    else:
-        form = PostForm()
-    return render(request,'blog/post_edit.html', {'form': form})
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            form = PostForm(request.POST)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.published_date = timezone.now()
+                post.save()
+                return redirect('post_detail', id=post.id)
+        else:
+            form = PostForm()
+        return render(request,'blog/post_edit.html', {'form': form})
+    return redirect('post_list')
+
+
+def post_edit(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.user == post.author:
+        if request.method == 'POST':
+                form = PostForm(request.POST, instance=post)
+                if form.is_valid():
+                    post = form.save(commit=False)
+                    post.author = request.user
+                    post.published_date = timezone.now()
+                    post.save()
+                    return redirect('post_detail', id=post.id)
+        else:
+            form = PostForm()
+        return render(request,'blog/post_edit.html', {'form': form})
+    return redirect('post_list')
 
 
 def post_list(request):
