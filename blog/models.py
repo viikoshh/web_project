@@ -1,6 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.urls import reverse
+
+from .managers import PostPublishedManager, PostManager
+
 
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -10,9 +14,19 @@ class Post(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
+    objects = PostManager()
+    published = PostPublishedManager()
+
     def publish(self):
         self.published_date = timezone.now()
         self.save()
+
+    def is_publish(self):
+        return True if self.published_date else False
+
+    #def get_absolute_url(self):
+    #    return reverse('post_detail', args=[str(self.id)])
+
 
     class Meta:
         verbose_name = "Запись в блоге"

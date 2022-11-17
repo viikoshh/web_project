@@ -14,7 +14,8 @@
     {% for post in posts %}
         <div>
             <p>Дата публикации: {{ post.published_date }}</p>
-            <h2><a href="#"> {{ post.title }} </a></h2>
+            <h3><a href="/posts/{{ post.id }}/"> {{ post.title }} </a></h3>
+            <!-- Почему-то не работают более правильные методы-->
             <p>
                 {{ post.text|linebreaksbr }}
             </p>
