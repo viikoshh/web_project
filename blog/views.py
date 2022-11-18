@@ -35,7 +35,10 @@ def post_edit(request, id=None):
             if form.is_valid():
                 post = form.save(commit=False)
                 post.author = request.user
-                post.published_date = timezone.now()
+                if post.is_published:
+                    post.published_date = timezone.now()
+                else:
+                    post.published_date = None
                 post.save()
                 return redirect('post_detail', id=post.id)
     else:
@@ -60,3 +63,9 @@ def handler404(request, exception, template_name="404.html"):
     response.status_code = 404
     return response
     # render_to_response устарел в Django 3.0
+
+@login_required
+def post_publish(request, id):
+    post = get_object_or_404(Post, id=id)
+    post.publish()
+    return redirect('post_detail', id=id)

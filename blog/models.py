@@ -9,10 +9,15 @@ from .managers import PostPublishedManager, PostManager
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    text = models.CharField(max_length=400)
-    created_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True)
+    title = models.CharField(max_length=200, verbose_name="Заголовок")
+    text = models.CharField(max_length=400, verbose_name="Текст статьи")
+    created_date = models.DateTimeField(default=timezone.now,
+                                        verbose_name="Дата создания")
+    published_date = models.DateTimeField(blank=True,
+                                          null=True,
+                                          verbose_name="Дата публикации")
+    is_published = models.BooleanField(default=False,
+                                       verbose_name="Запись опубликована?")
 
     objects = PostManager()
     published = PostPublishedManager()
