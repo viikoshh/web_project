@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 from .models import Post
 from .forms import PostForm
@@ -22,21 +23,24 @@ def post_add(request):
     return redirect('post_list')
 
 
-def post_edit(request, id):
-    post = get_object_or_404(Post, id=id)
-    if request.user == post.author:
-        if request.method == 'POST':
-                form = PostForm(request.POST, instance=post)
-                if form.is_valid():
-                    post = form.save(commit=False)
-                    post.author = request.user
-                    post.published_date = timezone.now()
-                    post.save()
-                    return redirect('post_detail', id=post.id)
-        else:
-            form = PostForm()
-        return render(request,'blog/post_edit.html', {'form': form})
-    return redirect('post_list')
+@login_required
+def post_edit(request, id=None):
+    post = get_object_or_404(Post, id=id) if id else None
+
+    if post and post.author != request.user:
+        return redirect('post_list')
+
+    if request.method == 'POST':
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.published_date = timezone.now()
+                post.save()
+                return redirect('post_detail', id=post.id)
+    else:
+        form = PostForm(instance=post)
+    return render(request,'blog/post_edit.html', {'form': form})
 
 
 def post_list(request):

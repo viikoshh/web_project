@@ -7,8 +7,11 @@
 {% block content %}
     {% for post in posts %}
         <div>
-            <p>Дата публикации: {{ post.published_date }}</p>
-            <h3><a href="/posts/{{ post.id }}/"> {{ post.title }} </a></h3>
+            <h3><a href="{% url 'post_detail' post.id%}"> {{ post.title }} </a></h3>
+            <div class="date">
+                <p>Дата публикации: {{ post.published_date }}</p>
+                <p>Автор: {{ post.author }}</p>
+            </div>
             <!-- Почему-то не работают более правильные методы-->
             <p>
                 {{ post.text|linebreaksbr }}

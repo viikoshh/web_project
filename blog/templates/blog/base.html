@@ -16,7 +16,14 @@
     {% block header %}
     <div class="page-header">
         {% if request.user.is_authenticated %}
-            <a href="/posts/add" class="top-menu">
+            <a href="{ url 'logout' }" class="top-menu">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+            <a href="{ url 'post_add' }" class="top-menu">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+        {% else %}
+            <a href="{ url 'login' }" class="top-menu">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
         {% endif %}
