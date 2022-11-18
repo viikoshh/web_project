@@ -6,16 +6,19 @@
 
 {% block content %}
     {% for post in posts %}
-        <div>
-            <h3><a href="{% url 'post_detail' post.id%}"> {{ post.title }} </a></h3>
+        <div class="post">
             <div class="date">
-                <p>Дата публикации: {{ post.published_date }}</p>
+                {% if post.published_date %}
+                    <p>Опубликовано: {{ post.published_date }}</p>
+                {% else %}
+                    <p>Не опубликовано</p>
+                {% endif %}
                 <p>Автор: {{ post.author }}</p>
             </div>
-            <!-- Почему-то не работают более правильные методы-->
-            <p>
-                {{ post.text|linebreaksbr }}
-            </p>
+
+            <h3><a href="{% url 'post_detail' post.id%}"> {{ post.title }} </a></h3>
+            <p>{{ post.text|linebreaksbr }}</p>
+            <p>Комментариев: {{ post.comment.count }}</p>
         </div>
     {% endfor %}
 {% endblock %}

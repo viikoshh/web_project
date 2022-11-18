@@ -4,7 +4,7 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required
 
 from .models import Post
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 
 
 def post_add(request):
@@ -58,14 +58,29 @@ def post_detail(request, id):
     return render(request, 'blog/post_detail.html', {'post': post})
 
 
-def handler404(request, exception, template_name="404.html"):
-    response = render(None, template_name)
-    response.status_code = 404
-    return response
-    # render_to_response устарел в Django 3.0
-
 @login_required
 def post_publish(request, id):
     post = get_object_or_404(Post, id=id)
     post.publish()
     return redirect('post_detail', id=id)
+
+
+def add_comment(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('post_detail', id=post.id)
+    else:
+        form = CommentForm()
+    return render(request, 'blog/add_comment.html', {'form': form})
+
+
+def handler404(request, exception, template_name="404.html"):
+    response = render(None, template_name)
+    response.status_code = 404
+    return response
+    # render_to_response устарел в Django 3.0
