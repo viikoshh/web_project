@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
+from django.template.defaultfilters import truncatewords
 
 from .managers import PostPublishedManager, PostManager
 
@@ -29,9 +30,11 @@ class Post(models.Model):
     def is_publish(self):
         return True if self.published_date else False
 
-    #def get_absolute_url(self):
-    #    return reverse('post_detail', args=[str(self.id)])
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
+    def get_preview_text(self):
+        return truncatewords(self.text, 10)
 
     class Meta:
         verbose_name = "Запись в блоге"

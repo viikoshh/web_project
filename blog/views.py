@@ -84,3 +84,10 @@ def handler404(request, exception, template_name="404.html"):
     response.status_code = 404
     return response
     # render_to_response устарел в Django 3.0
+
+
+from rest_framework import viewsets
+from .models import Comment
+from .serializers import CommentSerializer, BlogPostListSerializer
+
+
