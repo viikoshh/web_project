@@ -6,10 +6,10 @@ from .models import Post, Comment
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'text','is_published')
+        fields = ('title', 'text', 'is_published')
 
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('author', 'text')  #уточнить
+        fields = ('author', 'text')

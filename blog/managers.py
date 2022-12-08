@@ -25,5 +25,5 @@ class PostManager(Manager):
 
 class PostPublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_quetyset().filter(
-            published_date_lte=timezone.now())
+        return super().get_queryset().filter(
+            published_date__lte=timezone.now())

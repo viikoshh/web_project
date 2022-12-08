@@ -25,10 +25,12 @@ class Post(models.Model):
 
     def publish(self):
         self.published_date = timezone.now()
+        self.is_published = True
         self.save()
 
     def is_publish(self):
-        return True if self.published_date else False
+        return self.is_published
+        #return True if self.published_date else False
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
@@ -50,7 +52,7 @@ class Comment(models.Model):
                              related_name='comments')
     author = models.CharField(max_length=200)
     text = models.TextField(verbose_name="Комментарий")
-    created_date = models.DateTimeField(default=timezone.now(),
+    created_date = models.DateTimeField(default=timezone.now,
                                         verbose_name="Одобрен?")
     approved_comments = models.BooleanField(default=False,
                                             verbose_name="Одобрен?")
