@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from blog import urls as todo_urls
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/',include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', include('blog.urls')),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('blog/', include(todo_urls)),
 ]
 
 handler404 = 'blog.views.handler404'

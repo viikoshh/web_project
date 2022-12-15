@@ -12,7 +12,7 @@ class PostQuerySet(QuerySet):
                 Q(published_date_lte=timezone.now() | Q(author=user))
             )
         else:
-            return self.filter(published_date_lte=timezone.now())
+            return self.filter(published_date__lte=timezone.now())
 
 
 class PostManager(Manager):

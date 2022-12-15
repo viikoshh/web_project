@@ -43,8 +43,19 @@ class BlogPostViewSet(ActionSerializedViewSet):
         queryset = self.queryset
         author = self.request.query_params.get('author', None)
         if author:
-            queryset = queryset.filter(author__username=author)
+            queryset = queryset.filter(author_username=author)
         return queryset
+
+    @action(detail=False)
+    def published_posts(self, request):
+        published_posts = Post.published.all()
+        page = self.paginate_queryset(published_posts)
+        if page is not None:
+            serializers = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializers.data)
+
+        serializer = self.get_serializer(published_posts, many=True)
+        return Response(serializer.data)
 
     @action(detail=True,
             methods=['post'],
@@ -56,6 +67,5 @@ class BlogPostViewSet(ActionSerializedViewSet):
                             status=status.HTTP_200_OK)
         else:
             return Response({'message': 'You don\t have permission'},
-                            status=status.HTTP_403_FORBIDDEN
-                            )
+                            status=status.HTTP_403_FORBIDDEN)
 

@@ -3,6 +3,8 @@ from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
 from django.template.defaultfilters import truncatewords
+from django.shortcuts import get_object_or_404, render
+from django.http import Http404
 
 from .managers import PostPublishedManager, PostManager
 
@@ -23,19 +25,24 @@ class Post(models.Model):
     objects = PostManager()
     published = PostPublishedManager()
 
+    def post_detail(request, id):
+        post = get_object_or_404(Post, id=id)
+        if not post.is_publish() and not request.user.is_staff:
+            raise Http404('Запись в блоге не найдена')
+        return render(request, 'blog/post_detail.html', {'post': post})
+
     def publish(self):
         self.published_date = timezone.now()
         self.is_published = True
         self.save()
 
     def is_publish(self):
-        return self.is_published
-        #return True if self.published_date else False
+        return True if self.published_date else False
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
 
-    def get_preview_text(self):
+    def get_text_preview(self):
         return truncatewords(self.text, 10)
 
     class Meta:

@@ -1,12 +1,13 @@
 from rest_framework import serializers
 
 from blog.models import Comment, Post
+from django import forms
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('id', 'created_date', 'text', 'approved')
+        fields = ('id', 'created_date', 'text', 'approve')
 
 
 class BlogPostListSerializer(serializers.ModelSerializer):
