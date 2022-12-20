@@ -1,24 +1,25 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-    <title>My super juesy bloh</title>
+    <title>My blog</title>
 {% endblock %}
 
 {% block content %}
     {% for post in posts %}
-        <div class="post">
-            <div class="date">
+        <div class="post" style="background: #ffffff; margin-bottom: 20px; padding: 10px; padding-left: 20px;
+          border-radius: 20px">
+            <div class="date" style="font-size: 10px">
                 {% if post.published_date %}
-                    <p>Опубликовано: {{ post.published_date }}</p>
+                    <p style="margin-bottom: 0px;">Опубликовано: {{ post.published_date }}</p>
                 {% else %}
                     <p>Не опубликовано</p>
                 {% endif %}
-                <p>Автор: {{ post.author }}</p>
+                <p style="font-weight: bold; margin-bottom: 10px;">Автор: {{ post.author }}</p>
             </div>
 
         <!-- <h3><a href="{% url 'post_detail' post.id%}"> {{ post.title }} </a></h3>
            -->
-           <h3><a href="{{ post.get_absolute_url}}"> {{ post.title }} </a></h3>
+           <h3><a href="{{ post.get_absolute_url}}" class="nav-link px-2 link-dark"> {{ post.title }} </a></h3>
 
             <p>{{ post.text|linebreaksbr }}</p>
             <p>Комментариев: {{ post.comment.count }}</p>
