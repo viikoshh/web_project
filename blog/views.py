@@ -2,13 +2,15 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
+from .serializers import CommentSerializer, BlogPostListSerializer
 
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
 
 def post_add(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.method == 'POST':
             form = PostForm(request.POST)
             if form.is_valid():
@@ -72,6 +74,7 @@ def add_comment(request, id):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
+            comment.author = request.user
             comment.save()
             return redirect('post_detail', id=post.id)
     else:
@@ -85,9 +88,20 @@ def handler404(request, exception, template_name="404.html"):
     return response
     # render_to_response устарел в Django 3.0
 
+def post_update(request, id):
+    post = get_object_or_404(Post, id=id) if id else None
 
-from rest_framework import viewsets
-from .models import Comment
-from .serializers import CommentSerializer, BlogPostListSerializer
+    if post and post.author != request.user:
+        return redirect('post_list')
 
-
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('post_detail', id=post.id)
+    else:
+        form = PostForm(instance=post)
+    return render(request, "blog/post_edit.html", {'form': form})

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from blog import urls as todo_urls
+from blog import urls as blog_urls
 
 
 urlpatterns = [
@@ -23,7 +23,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('blog.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('blog/', include(todo_urls)),
+    path('blog/', include(blog_urls)),
 ]
 
 handler404 = 'blog.views.handler404'

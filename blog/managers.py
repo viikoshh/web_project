@@ -4,13 +4,12 @@ from django.utils import timezone
 
 
 class PostQuerySet(QuerySet):
-    def for_user(self, user=None):
+    def for_user(self, user=None) -> object:
         if user.is_staff:
             return self.all()
         elif user.is_authenticated:
             return self.filter(
-                Q(published_date_lte=timezone.now() | Q(author=user))
-            )
+                Q(published_date_lte=timezone.now()) | Q(author=user))
         else:
             return self.filter(published_date__lte=timezone.now())
 

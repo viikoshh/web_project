@@ -7,10 +7,10 @@
 {% block content %}
     {% for post in posts %}
         <div class="post" style="background: #ffffff; margin-bottom: 20px; padding: 10px; padding-left: 20px;
-          border-radius: 20px">
+          border-radius: 20px;border: 5px #000000">
             <div class="date" style="font-size: 10px">
                 {% if post.published_date %}
-                    <p style="margin-bottom: 0px;">Опубликовано: {{ post.published_date }}</p>
+                    <p style="margin-bottom: 10px;">Опубликовано: {{ post.published_date }}</p>
                 {% else %}
                     <p>Не опубликовано</p>
                 {% endif %}
