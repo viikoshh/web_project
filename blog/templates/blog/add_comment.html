@@ -1,5 +1,10 @@
 {% extends 'blog/base.html' %}
 {% load widget_tweaks %}
+
+{% block title %}
+    <title>Добавить комментарий</title>
+{% endblock %}
+
 {% block content %}
 <h1>
     {% if form.instance.id %}
