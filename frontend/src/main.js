@@ -10,6 +10,11 @@ import '@mdi/font/css/materialdesignicons.css'
 // import './plugins/vue.notificatons'
 // import './plugins/api.service'
 // import './auth.control'
+// import axios
+import axios from 'axios'
+
+// set a prototype for http
+Vue.prototype.$http = axios;
 
 import Default from '@/layouts/Default.vue'
 import Centered from '@/layouts/Centered.vue'
